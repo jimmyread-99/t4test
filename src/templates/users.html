@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+
+
+{% for user in users %}
+<div class="box">
+  <div class="columns has-text-left">
+      <div style="text-align: center;" class="column has-text-link">
+        <p style="text-align: center;" class="list-group-item list-group-item-dark">User Id:</p><br>
+          <a>
+              {{ user.id }}
+          </a>
+      </div>
+
+      <div style="text-align: center;" class="column">
+        <p class="list-group-item list-group-item-dark">Created:</p><br>
+            {{ user.created_at.strftime('%d-%m-%Y') }}
+        </div>
+        <div style="text-align: center;" class="column">
+          <p class="list-group-item list-group-item-dark">Email:</p><br>
+          {{ user.email }}
+        </div>
+        <div style="text-align: center;" class="column">
+          <p class="list-group-item list-group-item-dark">Name:</p><br>
+          {{ user.name }}
+        </div>
+        <div style="text-align: center;" class="column">
+          <p class="list-group-item list-group-item-dark">Membership:</p><br>
+          {{ user.membership }}
+        </div>
+        <div style="text-align: center;" class="column">
+          <p class="list-group-item list-group-item-dark">Valid:</p><br>
+          {{ user.valid }}
+        </div>
+        <div style="text-align: center;" class="column">
+          <p class="list-group-item list-group-item-dark">Valid Till:</p><br>
+          {{ user.valid_till }}
+        </div><br><br><div><br><br>
+        <a href="{{ url_for('main.get_single_users', user_id=user.id) }}" class="btn btn-primary is-small box" role="button" aria-pressed="true">Edit</a>
+
+      </div>
+  </div>
+</div>
+{% endfor %}
+
+{% endblock %}

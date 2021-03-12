@@ -1,0 +1,120 @@
+<!-- templates/profile.html -->
+
+{% extends "base.html" %}
+
+{% block content %}
+<h1 class="list-group-item list-group-item-dark" class="title">{{ current_user.name }}</h1>
+
+<div class="box">
+  <div class="columns has-text-left">
+    <div style="text-align: center;" class="column">
+
+      <p class="list-group-item list-group-item-dark">Email:</p><br>
+              {{ current_user.email }}
+          </div>
+          <div style="text-align: center;" class="column">
+
+            <p class="list-group-item list-group-item-dark">Membership:</p><br>
+              {{ current_user.membership }}
+        </div>
+        <div style="text-align: center;" class="column">
+
+          <p class="list-group-item list-group-item-dark">Valid:</p><br>
+          {{ current_user.valid }}
+        </div>
+        <div style="text-align: center;" class="column">
+
+          <p class="list-group-item list-group-item-dark">Valid Till:</p><br>
+          {{ current_user.valid_till }}
+        </div>
+  </div>
+</div> 
+
+{% if current_user.is_admin != True %}
+<div class="card mb-3">
+  <img src="https://i.imgur.com/aVTxTxE.jpg" class="card-img-top" alt="..."></div>
+  <div class="card-body">
+  <h5 class="list-group-item list-group-item-dark" class="card-title">Sessions</h5></div>
+  {% for session in sessions %}
+  
+  <div class="box">
+    <div class="columns has-text-left">
+        <div style="text-align: center;" class="column">
+
+          <p class="list-group-item list-group-item-dark">Date:</p><br>
+                {{ session.date.strftime('%d-%m-%Y') }}
+            </div>
+            <div style="text-align: center;" class="column">
+              <p class="list-group-item list-group-item-dark">Court:</p><br>
+                {{ session.court }}
+          </div>
+          <div style="text-align: center;" class="column">
+            <p class="list-group-item list-group-item-dark">Booking Type:</p><br>
+              {{ session.booking_type }}
+        </div>
+          <div style="text-align: center;" class="column">
+            <p class="list-group-item list-group-item-dark">Time Slot:</p><br>
+            {{ session.time_slot }}
+          </div><div><br><br>
+            <a class="btn btn-danger" class="btn btn-primary is-small box" role="button" aria-pressed="true" href="{{ url_for('main.booking_entry_update', booking_id=session.id) }}" >Cancel</a></div>
+      </div>
+    </div>
+{% endfor %}
+{% endif %}
+
+  {% if current_user.is_admin == True %}
+    <div class="card-body">
+    <h5 class="list-group-item list-group-item-dark" class="card-title">Lessons</h5></div>
+    {% for lesson in lessons %}
+  
+    <div class="box">
+      <div class="columns has-text-left">
+          <div class="column" style="text-align: center;">
+            <p class="list-group-item list-group-item-dark">Date:</p><br>
+                  {{ lesson.date }}
+              </div>
+              <div class="column" style="text-align: center;">
+                <p class="list-group-item list-group-item-dark">Court:</p><br>
+                  {{ lesson.court }}
+            </div>
+            <div class="column" style="text-align: center;">
+              <p class="list-group-item list-group-item-dark">Time Slot:</p><br>
+              {{ lesson.time_slot }}
+            </div>
+            <div class="column" style="text-align: center;">
+              <p class="list-group-item list-group-item-dark">Player:</p><br>
+              {{ lesson.name }}
+            </div><div><br><br>
+            <a class="btn btn-danger" class="btn btn-primary is-small box" role="button" aria-pressed="true" href="{{ url_for('main.booking_entry_update', booking_id=lesson.id) }}" >Cancel</a></div>
+      </div>
+    </div>
+
+{% endfor %}
+{% endif %}
+
+
+
+  <div class="column is-4 is-offset-4">
+    <h3 class="list-group-item list-group-item-dark" class="title">Change Password</h3>
+    <div class="box">
+        {% if error %}<p class=error><strong>Error:</strong> {{ error }}{% endif %}
+          {% with messages = get_flashed_messages() %}
+          {% if messages %}
+              <div class="notification is-danger">
+                  {{ messages[0] }}
+              </div>
+          {% endif %}
+          {% endwith %}
+        <form action="{{ url_for('auth.user_password_change') }}"  method="POST">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+            <div class="field">
+                <div class="control">
+                    <input class="input is-large" type="password" name="password" placeholder="New Password">
+                </div>
+            </div>
+
+            <button class="button is-block is-info is-large is-fullwidth">Change</button>
+        </form>
+    </div>
+</div>
+{% endblock %} 

@@ -1,0 +1,85 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+
+
+<form action="{{  url_for('main.query_date') }}"  method="GET">
+  <label class="list-group-item list-group-item-dark" for="entry">Select the date to see all the sessions for the day:</label><br>
+  <input style="font-size: 35px;" type="date" id="entry" name="entry">
+  <br><br>
+  <div class="buttons is-centered">
+  <input class="btn btn-primary is-small box" class="button is-info is-small box has-text-centered" type="submit" value="Submit">
+  </div>
+</form>
+
+<br><br>
+{% for booking in bookings %}
+<div class="box">
+  <div class="columns has-text-left">
+      <div class="column" style="text-align: center;">
+        <p class="list-group-item list-group-item-dark" >Date:</p><br>
+              {{ booking.date.strftime('%d-%m-%Y') }}
+          </div>
+          <div class="column" style="text-align: center;">
+            <p class="list-group-item list-group-item-dark">Court:</p><br>
+              {{ booking.court }}
+        </div>
+        <div class="column" style="text-align: center;">
+          <p class="list-group-item list-group-item-dark">Time Slot:</p><br>
+          {{ booking.time_slot }}
+        </div>
+        <div class="column" style="text-align: center;">
+          <p class="list-group-item list-group-item-dark">Session Type:</p><br>
+          {{ booking.booking_type }}
+        </div>
+        <div class="column" style="text-align: center;">
+          <p class="list-group-item list-group-item-dark">Player:</p><br>
+          {{ booking.name }}
+        </div>
+
+        <div><br>
+        {% if current_user.valid == "True" and booking.user_id == None and current_user.is_admin != True %}
+        <br>
+        <a href="{{ url_for('main.booking_entry_create', booking_id=booking.id) }}" class="btn btn-primary is-small box" role="button" aria-pressed="true">Book</a>
+        {% endif %}
+
+        {% if booking.user_id == current_user.id and current_user.is_admin != True %}
+        <br> 
+        <a href="{{ url_for('main.booking_entry_create', booking_id=booking.id) }}" class="btn btn-success" class="btn btn-primary is-small box" role="button" aria-pressed="true">Edit</a>
+        {% endif %}
+
+
+        {% if current_user.is_admin == True %}
+        <a href="{{ url_for('main.create_lessons', booking_id=booking.id) }}" class="btn btn-primary is-small box" role="button" aria-pressed="true">Lesson</a><div></div>
+        <a href="{{ url_for('main.booking_entry_delete', booking_id=booking.id) }}" class="btn btn-primary is-small box" role="button" aria-pressed="true">Clear</a>
+        {% endif %}
+        </div>
+
+  </div>
+</div>
+{% else %}
+<br><br>
+<div class="mgt-medium">
+<div class="notification is-danger">
+    <p>No entries recorded</p>
+</div>
+</div>
+  {% endfor %}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+{% endblock %}

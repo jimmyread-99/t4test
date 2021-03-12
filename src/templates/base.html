@@ -1,0 +1,111 @@
+<!-- templates/base.html -->
+
+<!DOCTYPE html>
+<html id="background">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    
+    <title>Murrumbeena Tennis Club</title>
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.7.2/css/bulma.min.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    
+
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+</head>
+
+<style>
+  #nav_links:hover { color: #ff6600;
+                     font-family: 'Orbitron', sans-serif;
+                     font-weight: 100;
+                     text-decoration: none;}
+
+  #background {background-image: url("https://i.imgur.com/wzQbdNa.jpg") !important;}
+
+  #nav_background {background-color: black !important;}
+
+  #padding_section {padding-top: 70px;}
+
+  #body_background {background-color: transparent;}
+
+  #dropdown_background {background-color: white !important;}
+
+  #dropdown_word_color {color: black;}
+</style>
+
+<body id="body_background">
+
+    <section id="padding_section"></section>
+        <div>
+            <nav id="nav_background" class="navbar fixed-top navbar-expand-lg navbar-dark bg-dark">
+
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="True" aria-label="Toggle navigation">
+                  <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+                  <div class="navbar-nav">
+                    <a id="nav_links" class="nav-item nav-link" href="{{ url_for('main.index') }}">Home</a>
+                    <a id="nav_links" class="nav-item nav-link" href="{{ url_for('main.play') }}">Want To Play</a>
+                    <a id="nav_links" class="nav-item nav-link" href="{{ url_for('main.calendar') }}">Calendar</a>
+                    <a id="nav_links" class="nav-item nav-link" href="{{ url_for('main.memberships') }}">Memberships</a>
+                    <a id="nav_links" class="nav-item nav-link" href="{{ url_for('main.contact') }}">Contact</a>
+                    <a id="nav_links" class="nav-item nav-link" href="{{ url_for('main.about') }}">About Us</a>
+                    {% if current_user.is_authenticated %}
+                    <div class="dropdown">
+                      <a id="nav_links" class="nav-item nav-link dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        Book A Session
+                      </a>
+                    
+                      <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                        <a class="dropdown-item" href="{{ url_for('main.date') }}">Casual Play</a>
+                        <a class="dropdown-item" href="{{ url_for('main.get_lessons') }}">Lessons</a>
+                      </div>
+                    </div>
+                    {% endif %}
+                    
+                  </div>
+                </div>
+
+                <div style="justify-content: flex-end;" class="collapse navbar-collapse" id="navbarNavAltMarkup">
+                  {% if current_user.is_anonymous %}
+                    <a href="{{ url_for('auth.signup') }}"><button class="btn btn-outline-success" type="button" >Sign Up</button></a>
+                    <a href="{{ url_for('auth.login') }}"><button class="btn btn-outline-success" type="button">Log In</button></a>
+                  {% endif %}
+                  {% if current_user.is_authenticated %}
+                    <span class="btn btn-dark">{{ current_user.name }} </span>
+                    {% if current_user.is_admin == True %}
+                    <div class="dropdown">
+                      <button class="btn btn-outline-success dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        Admin
+                      </button>
+                      <div id="dropdown_background" class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                        <a id="dropdown_word_color" class="dropdown-item" href="{{ url_for('main.query_users') }}">Users</a>
+                        <a id="dropdown_word_color" class="dropdown-item" href="{{ url_for('main.date') }}">Add Lessons</a>
+                      </div>
+                    </div>
+
+                    {% endif %}
+                    <a href="{{ url_for('main.profile') }}"><button class="btn btn-outline-success" type="button">Account</button></a>
+                    <a href="{{ url_for('auth.logout') }}"><button class="btn btn-outline-success" type="button">Log Out</button></a>
+                  {% endif %}
+                </span>
+              </nav>
+        <div class="hero-body">
+            <div class="container has-text-centered">
+               {% block content %}
+               {{ title }}
+               {% endblock %}
+            </div>
+        </div>
+    </section>
+  
+
+</body>
+</html>
+

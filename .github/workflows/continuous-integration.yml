@@ -1,0 +1,57 @@
+name: CI/CD
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  test_suite:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Branch
+        uses: actions/checkout@v2
+      - name: Set Up Python 3.8
+        uses: actions/setup-python@v2
+        with:
+          python-version: 3.8
+      - name: Install dependencies
+        run: |
+          cd src/
+          python -m pip install --upgrade pip
+          if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
+      - name: Run Tests
+        run: |
+          cd src/
+          python -m unittest discover tests/
+        # - name: Style Check
+        # run: |
+        #   cd src/
+        #   flake8 --ignore=E402 .
+
+
+  deployment:
+    needs: test_suite
+    runs-on: ubuntu-latest
+    # env: 
+    #   FLASK_ENV: testing
+    #   AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+    #   AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+    #   AWS_S3_BUCKET: ${{ secrets.AWS_S3_BUCKET }}
+    #   DB_URI: ${{ secrets.DB_URI }}
+
+
+    steps:
+      - name: Fresh clone & repo install
+        uses: appleboy/ssh-action@master
+        with:
+          host: 54.144.76.35
+          username: test
+          key: ${{ secrets.SSH_KEY }}
+          port: 22
+          script: |
+            rm -rf T4A2-B
+            git clone https://github.com/Jim-Read/T4A2-B
+            apt-get install python3-venv
+            cd src/
+            python3.8 -m venv /home/test/T4A2-B/src/venv
+            source /home/test/T4A2-B/src/venv/bin/activate
+            /home/test/T4A2-B/src/venv/bin/pip3.8 install -r /home/test/T4A2-B/src/requirements.txt

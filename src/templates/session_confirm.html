@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+{% if session.name != "None" %}
+<div class="alert alert-success" role="alert">
+  <h4 class="alert-heading">Success!</h4>
+  <p>Your Booking has been confirmed</p>
+  <hr>
+</div>
+{% endif %}
+{% if session.name == "None" %}
+<div class="alert alert-success" role="alert">
+  <h4 class="alert-heading">Success!</h4>
+  <p>Your Booking has been cancelled</p>
+  <hr>
+</div>
+{% endif %}
+
+<br>
+
+<div class="box">
+  <div class="columns has-text-left">
+      <div style="text-align: center;" class="column">
+        <p class="list-group-item list-group-item-dark" >Date:</p><br>
+              {{ session.date.strftime('%d-%m-%Y') }}
+          </div>
+          <div style="text-align: center;" class="column">
+            <p class="list-group-item list-group-item-dark" >Court:</p><br>
+              {{ session.court }}
+        </div>
+        <div style="text-align: center;" class="column">
+          <p class="list-group-item list-group-item-dark" >Time Slot:</p><br>
+          {{ session.time_slot }}
+        </div>
+        <div style="text-align: center;"class="column">
+          <p class="list-group-item list-group-item-dark" >Session Type:</p><br>
+          {{ session.booking_type }}
+        </div>
+        <div style="text-align: center;" class="column">
+          <p class="list-group-item list-group-item-dark" >Player:</p><br>
+            {{ session.name }}
+        </div>
+  </div>
+</div>
+
+
+<a class="btn btn btn-primary" href="{{ url_for('main.date') }}" role="button">Calendar</a>
+{% if current_user.is_admin == False %}
+<a class="btn btn btn-primary" href="{{ url_for('main.booking_entry_update', booking_id=session.id) }}" role="button">Cancel</a>
+{% endif %}
+{% if current_user.is_admin == True %}
+<a class="btn btn btn-primary" href="{{ url_for('main.booking_entry_delete', booking_id=session.id) }}" role="button">Delete</a>
+{% endif %}
+
+
+
+{% endblock %}

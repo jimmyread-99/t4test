@@ -1,0 +1,75 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+
+
+<h1 class="list-group-item list-group-item-dark" class="title">Lessons</h1>
+{% for lesson in lessons %}
+<div class="box">
+  <div class="columns has-text-left">
+      <div class="column" style="text-align: center;">
+        <p class="list-group-item list-group-item-dark">Date:</p><br>
+              {{ lesson.date.strftime('%d-%m-%Y') }}
+          </div>
+          <div class="column" style="text-align: center;">
+            <p class="list-group-item list-group-item-dark">Court:</p><br>
+              {{ lesson.court }}
+        </div>
+        <div class="column" style="text-align: center;">
+          <p class="list-group-item list-group-item-dark">Time Slot:</p><br>
+          {{ lesson.time_slot }}
+        </div>
+        <div class="column" style="text-align: center;">
+          <p class="list-group-item list-group-item-dark">Session Type:</p><br>
+          {{ lesson.booking_type }}
+        </div>
+        <div class="column" style="text-align: center;">
+          <p class="list-group-item list-group-item-dark">Player:</p><br>
+          {{ lesson.name }}
+        </div>
+        <div><br><br>
+        {% if lesson.user_id == None and current_user.is_admin != True and current_user.valid != "false" %}
+        <a href="{{ url_for('main.booking_entry_create', booking_id=lesson.id) }}" class="btn btn-primary is-small box" role="button" aria-pressed="true">Book</a>
+        {% endif %}
+
+        {% if lesson.user_id == current_user.id and current_user.is_admin != True %} 
+        <a href="{{ url_for('main.create_lessons', booking_id=lesson.id) }}" class="btn btn-success" class="btn btn-primary is-small box" role="button" aria-pressed="true">Edit</a>
+        {% endif %}
+
+        {% if current_user.is_admin == True %}
+        <a href="{{ url_for('main.create_lessons', booking_id=lesson.id) }}" class="btn btn-success" class="btn btn-primary is-small box" role="button" aria-pressed="true">Edit</a><div></div>
+        {% endif %}
+        </div>
+
+
+
+
+
+  </div>
+</div>
+{% else %}
+<br>
+<div class="mgt-medium">
+<div class="notification is-danger">
+    <p>No entries recorded</p>
+</div>
+</div>
+  {% endfor %}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+{% endblock %}
