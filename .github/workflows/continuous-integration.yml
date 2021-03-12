@@ -40,10 +40,10 @@ jobs:
           key: ${{ secrets.SSH_KEY }}
           port: 22
           script: |
-            rm -rf T4A2-B
-            git clone https://github.com/Jim-Read/T4A2-B
+            rm -rf t4test
+            git clone https://github.com/jimmyread-99/t4test
             apt-get install python3-venv
             cd src/
-            python3.8 -m venv /home/test/T4A2-B/src/venv
-            source /home/test/T4A2-B/src/venv/bin/activate
-            /home/test/T4A2-B/src/venv/bin/pip3.8 install -r /home/test/T4A2-B/src/requirements.txt
+            python3.8 -m venv /home/test/t4test/src/venv
+            source /home/test/t4test/src/venv/bin/activate
+            /home/test/t4test/src/venv/bin/pip3.8 install -r /home/test/t4test/src/requirements.txt
